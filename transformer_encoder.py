@@ -43,11 +43,16 @@ print(f"Shape do tensor de entrada X : {X.shape}  →  (Batch, Tokens, d_model)"
 print()
 
 def softmax(x):
+    """
+    Softmax numericamente estável.
+    Opera no último eixo do tensor.
+    """
     x_shifted = x - np.max(x, axis=-1, keepdims=True)
     exp_x     = np.exp(x_shifted)
     return exp_x / np.sum(exp_x, axis=-1, keepdims=True)
 
 def scaled_dot_product_attention(X, WQ, WK, WV):
+   
     d_k = WK.shape[1]
     
     Q = X @ WQ
@@ -84,6 +89,26 @@ for i in range(N_LAYERS):
      b2 = np.zeros(D_MODEL)
 
     layer_weights.append((WQ, WK, WV, W1, b1, W2, b2))
+
+Z = X.copy()
+
+print("=== Passagem pelo Encoder (Forward Pass) ===")
+print(f"Shape de entrada  : {Z.shape}")
+
+for layer_idx in range(N_LAYERS):
+    WQ, WK, WV, W1, b1, W2, b2 = layer_weights[layer_idx]
+X_att   = scaled_dot_product_attention(Z, WQ, WK, WV)
+
+X_norm1 = layer_norm(Z + X_att)
+
+X_ffn   = feed_forward_network(X_norm1, W1, b1, W2, b2)
+
+X_out   = layer_norm(X_norm1 + X_ffn)
+
+Z = X_out
+
+print(f"  Camada {layer_idx + 1}/6 → shape: {Z.shape}  | "
+          f"média={Z.mean():.4f}  desvio={Z.std():.4f}")
 
 
     
