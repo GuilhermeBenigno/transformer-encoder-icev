@@ -14,3 +14,20 @@ vocab_dict = {
     "sem":      7,
     "motivo":   8,
 }
+
+df_vocab = pd.DataFrame(
+    list(vocab_dict.items()),
+    columns=["palavra", "id"]
+)
+
+print("=== Vocabulário ===")
+print(df_vocab.to_string(index=False))
+print()
+
+frase = ["o", "banco", "bloqueou", "meu", "cartao", "de", "credito"]
+input_ids = [vocab_dict[palavra] for palavra in frase]
+
+print(f"Frase de entrada : {frase}")
+print(f"IDs da frase     : {input_ids}")
+print()
+
