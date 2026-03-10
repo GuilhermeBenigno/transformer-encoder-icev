@@ -110,6 +110,17 @@ Z = X_out
 print(f"  Camada {layer_idx + 1}/6 → shape: {Z.shape}  | "
           f"média={Z.mean():.4f}  desvio={Z.std():.4f}")
 
+print()
+print("=== Validação de Sanidade ===")
+print(f"Shape de entrada  (esperado): (1, {len(input_ids)}, {D_MODEL})")
+print(f"Shape de saída  Z (obtido)  : {Z.shape}")
+
+assert Z.shape == X.shape, "ERRO: Shape de saída difere do shape de entrada!"
+print("✓ Shapes idênticos — tensor Z contextualizado com sucesso!\n")
+
+print("=== Primeiros valores do Vetor Z (token 'o') ===")
+print(np.round(Z[0, 0, :8], 4))
+
 
     
 
