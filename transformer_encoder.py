@@ -58,5 +58,33 @@ def scaled_dot_product_attention(X, WQ, WK, WV):
     attn_weights = softmax(scores)
     
     output = attn_weights @ V
+    return output
+
+def layer_norm(x, epsilon=EPSILON):
+    mean = np.mean(x, axis=-1, keepdims=True)
+    var  = np.var(x,  axis=-1, keepdims=True)
+    return (x - mean) / np.sqrt(var + epsilon)
+
+def feed_forward_network(x, W1, b1, W2, b2):
+    hidden = np.maximum(0, x @ W1 + b1)
+    output = hidden @ W2 + b2
+    return output
+
+layer_weights = []
+for i in range(N_LAYERS):
+    d_k = D_MODEL
+     d_v = D_MODEL
+     WQ = np.random.randn(D_MODEL, d_k) * np.sqrt(2.0 / D_MODEL)
+     WK = np.random.randn(D_MODEL, d_k) * np.sqrt(2.0 / D_MODEL)
+     WV = np.random.randn(D_MODEL, d_v) * np.sqrt(2.0 / D_MODEL)
+
+     W1 = np.random.randn(D_MODEL, D_FF)   * np.sqrt(2.0 / D_MODEL)
+     b1 = np.zeros(D_FF)
+     W2 = np.random.randn(D_FF,   D_MODEL) * np.sqrt(2.0 / D_FF)
+     b2 = np.zeros(D_MODEL)
+
+    layer_weights.append((WQ, WK, WV, W1, b1, W2, b2))
+
+
     
 
