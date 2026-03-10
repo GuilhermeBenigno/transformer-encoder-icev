@@ -30,4 +30,12 @@ input_ids = [vocab_dict[palavra] for palavra in frase]
 print(f"Frase de entrada : {frase}")
 print(f"IDs da frase     : {input_ids}")
 print()
+vocab_size     = len(vocab_dict)
+embedding_table = np.random.randn(vocab_size, D_MODEL)
+
+print(f"Frase de entrada : {frase}")
+print(f"IDs da frase     : {input_ids}")
+
+X = embedding_table[input_ids]
+X = X[np.newaxis, :, :]
 
